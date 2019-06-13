@@ -1,3 +1,6 @@
+英文原版地址
+http://neuralnetworksanddeeplearning.com/chap1.html
+
 # 神经网络与深度学习
 
 

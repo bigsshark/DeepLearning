@@ -28,4 +28,7 @@ ps: 感知机是神经网络和Support Vector Machine 的基础
 
 # 神经网络到底在干嘛?
 
-# 
+# https://www.codelast.com/原创-再谈-最速下降法梯度法steepest-descent/ 
+
+
+
