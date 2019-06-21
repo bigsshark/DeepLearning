@@ -90,7 +90,7 @@ class Network(object):
 			t_b[-l] = delta
 			t_w[-l] = np.dot(delta,activations[-l-1].transpose())
 		return (n_b,n_w)
-    def 􏾥􏿁􏾖􏾘􏾷􏾖􏾑􏾥􏾥􏿁􏾖􏾘􏾷􏾖􏾑􏾥evaluate(self,data):
+    def 􏾥􏿁􏾖􏾘􏾷􏾖􏾑􏾥􏾥􏿁􏾖􏾘evaluate(self,data):
     	test_results = [(np.argmax(self.feedforward(x)),y) for (x,y) in data]
     	return sum(int(x == y) for (x,y) in test_results)
     def cost_derivative(self,output_actions,y):
