@@ -1,20 +1,46 @@
-# Rectified Linear Units Improve Restricted Boltzmann Machines
-整流线性单元改进了受限制的玻尔兹曼机器
----
-## Abstract
+# Deep Sparse Rectifier Neural Networks
+
+线性整流单元对比tanhs在生物神经元上是更好的模型，也有更好的表现。虽然rectifier neural在0出是hard-nonlinear 和 不可微分的，但是在0处创造了更接近于自然的稀释表征。 虽然tanh可以利用额外的un-labled数据进行半监督设置，但是relu同样可以达到这样的效果而不需要非监督的预训练。 这样的结果可以看做是理解纯粹的监督学习难度的里程碑，同时缩小了有非监督学习预处理和无之间的差距。
 
 
----
-## Introduction
+introduction
 
----
-## Rectified Linear Unit
+计算神经科学模型和机器学习神经网络模型
+- 计算神经科学模型和机器学习神经网络模型目的的不同以及相关差异性
+- 两者之间的桥接relu
+- relu在深度神经网络中对训练的影响(3 or more)
 
----
-## Intensity equivariance
+灵长类生物的启发
+- algorithm 的重要性
+- 边缘检测、原始形状、向上更加复杂的形状
+- 网络的前几层很像 v1和v2视觉层，并且越来越不可变在高维。
 
----
-##  Empirical Evaluation
+深度网络的训练
+- 为什么无监督预训练有助于训练
+- 原始数据导致训练失败
+- 本篇paper将会从机器学习的角度给出答案
 
----
-##  Jittered-Cluttered NORB
+寻找tanh和slogistics的替代品
+- relu
+- 受限玻尔兹曼机器条件影响下的训练
+- denoising auto- encoders  去噪自动编码器预训练
+- l1 促进稀疏，存在无限激活的潜在数值问题
+- 文本分析，图像分类在relu和tanh下的分析
+
+relu
+- relu的稀疏性
+- relu的线性性在神经网络训练表现得更好
+- relu激活在有无无监督预训练情况下的差距
+- 桥接  神经科学/神经网络模型
+
+文章结构
+- 激发工作的神经科学和机器学习背景
+- 神经元对架构的益处和缺点
+- 图像分类和文本上的分析
+- 结论
+
+
+
+background
+
+
