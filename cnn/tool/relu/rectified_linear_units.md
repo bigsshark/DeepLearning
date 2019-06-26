@@ -3,7 +3,7 @@
 线性整流单元对比tanhs在生物神经元上是更好的模型，也有更好的表现。虽然rectifier neural在0出是hard-nonlinear 和 不可微分的，但是在0处创造了更接近于自然的稀释表征。 虽然tanh可以利用额外的un-labled数据进行半监督设置，但是relu同样可以达到这样的效果而不需要非监督的预训练。 这样的结果可以看做是理解纯粹的监督学习难度的里程碑，同时缩小了有非监督学习预处理和无之间的差距。
 
 
-introduction
+## introduction
 
 计算神经科学模型和机器学习神经网络模型
 - 计算神经科学模型和机器学习神经网络模型目的的不同以及相关差异性
@@ -41,7 +41,7 @@ relu
 
 
 
-background
+## background
 
 生物神经元和神经网络神经元
 - 生物神经元稀疏性的激活1-5%，神经网络神经元sigmoid为0.5，hurt gradient -based optimization
@@ -53,3 +53,38 @@ background
 - 线性可分， 稀疏表示自动映射到高维空间
 - 分布但是稀疏
 
+
+## Deep Rectifier Networks
+
+1 rectifier neurons
+- 皮质神经元可以通过rectifier来模拟
+- 单侧，抑制性。可以通过组合共享参数的整流线性和非线性来获得对称性和非对称性
+
+1.1 Advantages
+- 稀疏性除了生物上的合理也在数学上有有是。
+- 非线性来自于部分激活，分布来自于非线性激活。一旦去激活神经元确定，那么输出就是输入的线性函数。
+- 指数级的参数共享,线性性计算更加容易，成本更低，梯度流动良好(没有梯度消失)
+
+1.2 potential problems
+- 无线激活 ， 使用l1增加稀疏性
+- 在0出的硬饱和也许会伤害反向梯度下降传播的x优化
+- 对称行为的数据，需要两倍于神经元的rectifier的数量
+
+2 unsupervised pre-training
+
+
+## Experimental Study
+
+- train: for tuning parameters 
+- valid: tuning hyper-parameters
+- test: for report- ing generalization performance
+
+
+##  Conclusion
+
+- 存在问题: 0点梯度，参数的不良调节
+- 稀疏性神经元
+- 稀疏度50-80%, 大脑是95-99%
+- 在文本方面可能有强大的潜力(文本天然稀疏)
+- 生物h神经和神经网络
+- 预训练和为未训练之间的差距
