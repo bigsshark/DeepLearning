@@ -5,12 +5,15 @@ import os
 test_size = 0.3
 random_state = 2019
 
-train_list_file = "/Users/batele/Desktop/DeepLearning/data/VehicleID_V1.0/train_test_split/train_list.txt"
-model_attr_file = "/Users/batele/Desktop/DeepLearning/data/VehicleID_V1.0/attribute/model_attr.txt"
+train_list_file = "./txt/train_test_split/train_list.txt"
+model_attr_file = "./txt/attribute/model_attr.txt"
 
-train_valid_save_path = "/Users/batele/Desktop/DeepLearning/method1/train_valid/"
+train_valid_save_path = "./method1/train_valid/"
 
+#img_base_path = "/students/openDataSets/VehicleID_V1.0/image/"
 img_base_path = "/Users/batele/Desktop/DeepLearning/data/VehicleID_V1.0/image/"
+
+
 
 def vehicleid_imgnames(file):
     """
