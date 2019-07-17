@@ -37,8 +37,8 @@ RANDOM_SCALE = True
 CLASS_WARE = False
 nbr_gpus = len(GPUS.split(','))
 
-train_path = './train_valid/train_vid_model.txt'
-val_path = './train_valid/valid_vid_model.txt'
+train_path = 'train_valid/train_vid_model.txt'
+val_path = 'train_valid/valid_vid_model.txt'
 
 
 if __name__ == "__main__":
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         #    model = load_model('./models/step1_inception3.h5')
         from tensorflow.keras.initializers import glorot_uniform
         sess = tf.Session()
-        model = tf.keras.models.load_model("./models/InceptionV3_vehicleModel_Method1.h5",custom_objects={'GlorotUniform': glorot_uniform()})
+        model = keras.models.load_model("./models/InceptionV3_vehicleModel_Method1.h5",custom_objects={'GlorotUniform': glorot_uniform()})
     else:
         print('Loading InceptionV3 Weights ...')
         inception = InceptionV3(include_top=False, weights=None,
