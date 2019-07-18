@@ -19,7 +19,10 @@ from tensorflow.keras.optimizers import SGD
 
 
 
-from utils import generator_batch_multitask
+#from utils import generator_batch_multitask
+from generator import ModelColorGererator
+
+
 
 
 np.random.seed(1024)
@@ -37,10 +40,12 @@ RANDOM_SCALE = True
 nbr_gpus = len(GPUS.split(','))
 INITIAL_EPOCH = 0
 
+
+
 train_path = 'train_valid/train_image_model_color.txt'
 val_path = 'train_valid/valid_image_model_color.txt'
 
-save_model_path = "models/modelcolor_inception3.h5"
+save_model_path = "./models/InceptionV3_vehicleModelColor.h5"
 
 if __name__ == "__main__":
 
@@ -77,12 +82,12 @@ if __name__ == "__main__":
     print('Using a single GPU.\n')
         
     model.compile(loss=["categorical_crossentropy", "categorical_crossentropy"],
-                  loss_weights = [0.6, 0.4],
+                  #loss_weights = [0.6, 0.4],
                   optimizer=optimizer, metrics=["accuracy"])
 
     #model.summary()
 
-    best_model_saved = "./models/InceptionV3_vehicleModelColor_facs=1024_epoch={epoch:04d}-loss={loss:.4f}-modelAcc={predictions_model_acc:.4f}-colorAcc={predictions_color_acc:.4f}-val_loss={val_loss:.4f}-val_modelAcc={val_predictions_model_acc:.4f}-val_colorAcc={val_predictions_color_acc:.4f}.h5"
+    best_model_saved = "./models/InceptionV3_vehicleModelColor.h5"
     # Define several callbacks
 
     checkpoint = ModelCheckpoint(best_model_saved, verbose = 1)
@@ -105,14 +110,14 @@ if __name__ == "__main__":
     print('# Val Images: {}.'.format(nbr_val))
     validation_steps = int(ceil(nbr_val * 1. / BATCH_SIZE))
 
-    model.fit_generator(generator_batch_multitask(train_data_lines,
-                        nbr_class_one = NBR_MODELS, nbr_class_two = NBR_COLORS,
+    model.fit_generator(ModelColorGererator(train_data_lines,
+                        nbr_class_model = NBR_MODELS, nbr_class_color = NBR_COLORS,
                         batch_size = BATCH_SIZE, img_width = IMG_WIDTH,
                         img_height = IMG_HEIGHT, random_scale = RANDOM_SCALE,
                         shuffle = True, augment = True),
                         steps_per_epoch = steps_per_epoch, epochs = NBR_EPOCHS, verbose = 1,
-                        validation_data = generator_batch_multitask(val_data_lines,
-                        nbr_class_one = NBR_MODELS, nbr_class_two = NBR_COLORS, batch_size = BATCH_SIZE,
+                        validation_data = ModelColorGererator(val_data_lines,
+                        nbr_class_model = NBR_MODELS, nbr_class_color = NBR_COLORS, batch_size = BATCH_SIZE,
                         img_width = IMG_WIDTH, img_height = IMG_HEIGHT,
                         shuffle = False, augment = False),
                         validation_steps = validation_steps,
