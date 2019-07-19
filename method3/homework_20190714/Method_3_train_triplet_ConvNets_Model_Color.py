@@ -77,14 +77,12 @@ def filter_data_list(data_list):
 
 if __name__ == "__main__":
 
-    # 通过训练后的模型继续训练
     if FINE_TUNE:
         model_path = './models/triplet_models_backup/InceptionV3_Triplet_epoch=0026-loss=0.9686-modelAcc=0.9909-colorAcc=0.9617-val_loss=1.2408-val_modelAcc=0.9899-val_colorAcc=0.9350.h5'
         print('Finetune and Loading {} ...'.format(model_path))
         model = load_model(model_path, custom_objects={'identity_loss': identity_loss, 'triplet_loss': triplet_loss, 'MARGIN': MARGIN})
         INITIAL_EPOCH = 26
 
-    # 通过颜色和模型分类网络进行训练
     elif FINE_TUNE_ON_ATTRIBUTES:
         print('Finetune on the attributes model ...')
         # Begin with Attributes pretrained weights.
@@ -122,7 +120,6 @@ if __name__ == "__main__":
 
         model = Model(inputs = [anchor, positive, negative], outputs = [f_model, f_color, loss])
     else:
-        # 从头开始训练
         # Begin with Imagenet pretrained weights.
         print('Loading InceptionV3 Weights from ImageNet Pretrained ...')
         inception = InceptionV3(include_top=False, weights= None,

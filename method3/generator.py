@@ -2,28 +2,37 @@ import numpy as np
 from tensorflow import keras
 from utils import *
 
-class ModelColorGererator(keras.utils.Sequence):
+class RPNGererator(keras.utils.Sequence):
     """
     Generates data for Keras
+
+            def generator_batch_triplet(data_list, dic_data_list, nbr_class_one=250, nbr_class_two=7,
+                    batch_size=32, return_label=True, mode='train',
+                    crop_method=center_crop, scale_ratio=1.0, random_scale=False,
+                    img_width=299, img_height=299, shuffle=True,
+                    save_to_dir=None, save_network_input=None, augment=False):
+
     """
 
-    def __init__(self, data_list, nbr_class_model=250, nbr_class_color=7, batch_size=32,return_label=True,
-                 crop_method=center_crop,scale_ratio=1.0,random_scale=False,preprocess=False,img_width=299,
-                 img_height=299,shuffle=True,save_to_dir=None,augment=False):
+    def __init__(self, data_list, dic_data_list,nbr_class_model=250, nbr_class_color=7, batch_size=32,return_label=True,
+                 mode='train',crop_method=center_crop,scale_ratio=1.0,random_scale=False,img_width=299,
+                 img_height=299,shuffle=True,save_to_dir=None,save_network_input=None,augment=False):
         
         self.data_list = data_list
+        self.dic_data_list = dic_data_list
         self.nbr_class_model = nbr_class_model
         self.nbr_class_color = nbr_class_color
         self.batch_size = batch_size
         self.return_label = True
+        self.mode = mode
         self.crop_method = crop_method
         self.scale_ratio = scale_ratio
         self.random_scale = random_scale
-        self.preprocess = preprocess
         self.img_width = 299
         self.img_height = 299
         self.shuffle = shuffle
         self.save_to_dir = save_to_dir
+        self.save_network_input = save_network_input
         self.augment = augment
         self.on_epoch_end()
         
@@ -54,19 +63,47 @@ class ModelColorGererator(keras.utils.Sequence):
 
     def __data_generation(self, data_list_temp):
 
+
+        """
+
+        def generator_batch_triplet(data_list, dic_data_list, nbr_class_one=250, nbr_class_two=7,
+                    batch_size=32, return_label=True, mode='train',
+                    crop_method=center_crop, scale_ratio=1.0, random_scale=False,
+                    img_width=299, img_height=299, shuffle=True,
+                    save_to_dir=None, save_network_input=None, augment=False):
+    '''
+    A generator that yields a batch of ([anchor, positive, negative], [class_one, class_two, pseudo_label]).
+
+    Input:
+        data_list  : a list of [img_path, vehicleID, modelID, colorID]
+        dic_data_list: a dictionary: {modelID: {colorID: {vehicleID: [imageName, ...]}}, ...}
+        shuffle    : whether shuffle rows in the data_llist
+        batch_size : batch size
+        mode       : generator used as for 'train', 'val'.
+                     if mode is set 'train', dic_data_list has to be specified.
+                     if mode is set 'val', dic_data_list could be a null dictionary: { }.
+                     if mode is et 'feature_extraction', then return (X_anchor)
+
+
+    Output:
+        ([anchor, positive, negative], [class_one, class_two, pseudo_label]
+    '''
+        """
         # Initialization
         current_batch_size = len(data_list_temp)
 
         X_batch = np.zeros((current_batch_size, self.img_width, self.img_height, 3))
         Y_model_batch = np.zeros((current_batch_size, self.nbr_class_model))
         Y_color_batch = np.zeros((current_batch_size, self.nbr_class_color))
+        Y_vid_batch = np.zeros((current_batch_size, 1))
 
         for i in np.arange(current_batch_size):
 
             line_result = data_list_temp[i].strip().split(' ')
             #print line
             if self.return_label:
-                label = (int(line_result[-2]),int(line_result[-1]))
+                #         # line imagepath  vid model color
+                label = (int(line_result[-3]),int(line_result[-2]),int(line_result[-1]))
             img_path = line_result[0]
 
             if self.random_scale:
@@ -78,8 +115,9 @@ class ModelColorGererator(keras.utils.Sequence):
             X_batch[i] = img
 
             if self.return_label:
-                Y_model_batch[i , label[0]] = 1
-                Y_color_batch[i , label[1]] = 1
+                Y_model_batch[i , label[1]] = 1
+                Y_color_batch[i , label[2]] = 1
+                Y_vid_batch[i] = label[0]
 
         if self.augment:
             X_batch = X_batch.astype(np.uint8)
@@ -103,6 +141,6 @@ class ModelColorGererator(keras.utils.Sequence):
         img = np.reshape(img, (-1))
 
         if self.return_label:
-            return (X_batch,[Y_model_batch,Y_color_batch])
+            return (X_batch,[Y_model_batch,Y_color_batch,Y_vid_batch])
         else:
             return X_batch

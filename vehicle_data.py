@@ -16,6 +16,7 @@ method1_train_valid_save_path = "./method1/train_valid/"
 
 method2_train_valid_save_path = "./method2/train_valid/"
 
+method3_train_valid_save_path = "./method3/train_valid/"
 
 #img_base_path = "/students/openDataSets/VehicleID_V1.0/image/"
 #img_base_path = "/Users/batele/Desktop/DeepLearning/data/VehicleID_V1.0/image/"
@@ -78,6 +79,8 @@ def vid_color(file):
                 color = vid_color[1].replace('\n','')
                 vid2color_dict[vid] = color
     return vid2color_dict
+
+# 只训练汽车model的数据
 def train_valid_data():
 
     vid2model_dict = vid_model(model_attr_file)
@@ -115,7 +118,7 @@ def train_valid_data():
         for i in valid_imgid2model_list:
             f.write(i)
 
-
+# 训练汽车模型和color的数据
 def imageid2_model_color():
     """
         return list with <imagename> <model> <color>
@@ -157,12 +160,59 @@ def imageid2_model_color():
         for i in valid_imgid_model_color_list:
             f.write(i)
 
+# repression network
+def image_vid_model_color():
+    
+    """
+        return list with <imagename> <vid> <model> <color>
+    """
+    vid2imgs_dict = vehicleid_imgnames(train_list_file)
+    vid2model_dict = vid_model(model_attr_file)
+    vid2color_dict = vid_color(color_attr_file)
+
+
+    imgid_model_color_list = []
+    
+    for key in vid2imgs_dict.keys():
+    
+        if key in vid2model_dict.keys() and key in vid2color_dict.keys():
+            model = vid2model_dict[key]
+            color = vid2color_dict[key]
+            for imgname in vid2imgs_dict[key]:
+                image_full_path = img_base_path + imgname + ".jpg"
+                image_model_string = image_full_path + " " + key + " " + model + " " + color + "\r\n"
+                imgid_model_color_list.append(image_model_string)
+
+    np.random.shuffle(imgid_model_color_list)
+    index = int(len(imgid_model_color_list) * (1-test_size))
+    
+    train_imgid_model_color_list = imgid_model_color_list[:index]
+    valid_imgid_model_color_list = imgid_model_color_list[index:]
+
+
+    train_full_path = method3_train_valid_save_path + "train_image_vid_model_color.txt"
+    valid_full_path = method3_train_valid_save_path + "valid_image_vid_model_color.txt"
+
+    with open(train_full_path,'w') as f:
+    
+        for i in train_imgid_model_color_list:
+            f.write(i)
+    
+    with open(valid_full_path,'w') as f:
+    
+        for i in valid_imgid_model_color_list:
+            f.write(i)
+
+
 
 if __name__ == "__main__":
 
     # method1
-    # train_valid_data()
+    train_valid_data()
 
     # method2
-    imageid2_model_color()
+    #imageid2_model_color()
+
+    # rpn
+    #image_vid_model_color()
 
